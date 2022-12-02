@@ -27,25 +27,16 @@ class AuthController extends Controller
                 ]
             );
 
-            if ($validator->fails()) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password)
+            ]);
 
-                return response()->json([
-                    'status' => false,
-                    'message' => 'validation error',
-                    'errors' => $validator->errors()
-                ], 401);
-
-                $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password)
-                ]);
-
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Registration was successful',
-                ], 200);
-            }
+            return response()->json([
+                'status' => true,
+                'message' => 'Registration was successful',
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
